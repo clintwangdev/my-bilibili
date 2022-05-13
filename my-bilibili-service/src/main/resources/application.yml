@@ -1,0 +1,12 @@
+server:
+  port: 8080
+# profile
+spring:
+  application:
+    name: my-bilibili
+  profiles:
+    active: test
+# MyBatis
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.clint.mybilibili.dao
