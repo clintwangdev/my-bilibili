@@ -50,7 +50,7 @@ public class JsonResponse<T> {
      *
      * @return 响应成功数据
      */
-    public static JsonResponse<String> success(String data) {
+    public static <T> JsonResponse<T> success(T data) {
         return new JsonResponse<>(data);
     }
 

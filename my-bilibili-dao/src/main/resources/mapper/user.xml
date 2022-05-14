@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clint.mybilibili.dao.UserDao">
+
+    <!-- 根据手机号获取用户 -->
+    <select id="getUserByPhone" parameterType="java.lang.String" resultType="com.clint.mybilibili.domain.User">
+        select
+            *
+        from
+            t_user
+        where
+            phone = #{phone}
+    </select>
+
+    <!-- 添加用户 (添加成功后将 ID 注入到实体类中) -->
+    <insert id="saveUser" parameterType="com.clint.mybilibili.domain.User" useGeneratedKeys="true" keyProperty="id">
+        insert into
+            t_user(
+                phone,
+                email,
+                password,
+                salt,
+                createTime,
+                updateTime
+        ) values(
+                #{phone},
+                #{email},
+                #{password},
+                #{salt},
+                #{createTime},
+                #{updateTime}
+            )
+    </insert>
+
+    <!-- 添加用户信息 -->
+    <insert id="saveUserInfo" parameterType="com.clint.mybilibili.domain.UserInfo">
+        insert into
+            t_user_info(
+                userId,
+                nick,
+                avatar,
+                sign,
+                gender,
+                birth,
+                createTime,
+                updateTime
+        ) values(
+                #{userId},
+                #{nick},
+                #{avatar},
+                #{sign},
+                #{gender},
+                #{birth},
+                #{createTime},
+                #{updateTime}
+            )
+    </insert>
+
+    <!-- 根据 ID 获取用户 -->
+    <select id="getUserById" parameterType="java.lang.Long" resultType="com.clint.mybilibili.domain.User">
+        select
+            *
+        from
+            t_user
+        where
+            id = #{userId}
+    </select>
+
+    <!-- 根据 ID 获取用户信息 -->
+    <select id="getUserInfoByUserId" parameterType="java.lang.Long" resultType="com.clint.mybilibili.domain.UserInfo">
+        select
+            *
+        from
+            t_user_info
+        where
+            userId = #{userId}
+    </select>
+
+</mapper>

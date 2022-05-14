@@ -1,9 +1,37 @@
 package com.clint.mybilibili.dao;
 
+import com.clint.mybilibili.domain.User;
+import com.clint.mybilibili.domain.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserDao {
 
-    Long query(Long id);
+    /**
+     * 根据手机号获取用户
+     *
+     * @param phone 手机号
+     * @return 用户
+     */
+    User getUserByPhone(String phone);
+
+    /**
+     * 添加用户
+     */
+    Integer saveUser(User user);
+
+    /**
+     * 添加用户信息
+     */
+    Integer saveUserInfo(UserInfo userInfo);
+
+    /**
+     * 根据 ID 获取用户
+     */
+    User getUserById(Long userId);
+
+    /**
+     * 根据用户 ID 获取用户信息
+     */
+    UserInfo getUserInfoByUserId(Long userId);
 }
