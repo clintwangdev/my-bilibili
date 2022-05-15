@@ -18,7 +18,7 @@ public class UserConstant {
     /**
      * 性别: 未知
      */
-    public static final String GENDER_UNKNOW = "2";
+    public static final String UNKNOWN = "2";
 
     /**
      * 默认生日: 1999-10-01
@@ -29,4 +29,14 @@ public class UserConstant {
      * 默认昵称: 萌新
      */
     public static final String DEFAULT_NICK = "萌新";
+
+    /**
+     * 用户关注默认分组类型
+     */
+    public static final String DEFAULT_USER_FOLLOWING_GROUP_TYPE = "2";
+
+    /**
+     * 用户关注全部分组名
+     */
+    public static final String USER_FOLLOWING_GROUP_ALL_NAME = "全部分组";
 }

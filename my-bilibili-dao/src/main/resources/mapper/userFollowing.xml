@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clint.mybilibili.dao.UserFollowingDao">
+
+    <!-- 删除'用户 ID'和'关注用户 ID'的关联 -->
+    <delete id="removeUserFollowing">
+        delete from
+            t_user_following
+        where
+            userId = #{userId} and followingId = #{followingId}
+    </delete>
+
+    <!-- 添加用户关注 -->
+    <insert id="saveUserFollowing" parameterType="com.clint.mybilibili.domain.UserFollowing">
+        insert into
+            t_user_following(
+                userId,
+                followingId,
+                groupId,
+                createTime
+            )
+        values (
+                #{userId},
+                #{followingId},
+                #{groupId},
+                #{createTime}
+               )
+    </insert>
+
+    <!-- 获取用户关注用户列表 -->
+    <select id="getUserFollowings" parameterType="java.lang.Long" resultType="com.clint.mybilibili.domain.UserFollowing">
+        select
+            *
+        from
+            t_user_following
+        where
+            userId = #{userId}
+    </select>
+
+    <!-- 获取用户粉丝列表 -->
+    <select id="getUserFans" parameterType="java.lang.Long" resultType="com.clint.mybilibili.domain.UserFollowing">
+        select
+            *
+        from
+            t_user_following
+        where
+            followingId = #{followingId}
+    </select>
+
+</mapper>

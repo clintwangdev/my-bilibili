@@ -4,6 +4,9 @@ import com.clint.mybilibili.domain.User;
 import com.clint.mybilibili.domain.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+import java.util.Set;
+
 @Mapper
 public interface UserDao {
 
@@ -39,4 +42,12 @@ public interface UserDao {
      * 修改用户信息
      */
     Integer updateUserInfos(UserInfo userInfo);
+
+    /**
+     * 根据用户 ID 批量查询用户信息
+     *
+     * @param userIdList 关注用户 ID 集合
+     * @return 用户信息集合
+     */
+    List<UserInfo> getUserInfoByUserIds(Set<Long> userIdList);
 }
