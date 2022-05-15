@@ -52,4 +52,25 @@ public class UserFollowingApi {
         List<UserFollowing> fanList = userFollowingService.getUserFans(userId);
         return JsonResponse.success(fanList);
     }
+
+    /**
+     * 新建用户关注分组
+     */
+    @PostMapping("/user-following-groups")
+    public JsonResponse<Long> saveUserFollowingGroups(@RequestBody FollowingGroup followingGroup) {
+        Long userId = userSupport.getCurrentId();
+        followingGroup.setUserId(userId);
+        Long groupId = userFollowingService.saveUserFollowingGroup(followingGroup);
+        return JsonResponse.success(groupId);
+    }
+
+    /**
+     * 获取用户关注分组
+     */
+    @GetMapping("/user-following-groups")
+    public JsonResponse<List<FollowingGroup>> getUserFollowingGroups() {
+        Long userId = userSupport.getCurrentId();
+        List<FollowingGroup> followingGroupList = userFollowingService.getUserFollowingGroups(userId);
+        return JsonResponse.success(followingGroupList);
+    }
 }

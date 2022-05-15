@@ -115,7 +115,7 @@ public class UserFollowingService {
     }
 
     /**
-     * 获取用户粉丝
+     * 获取用户粉丝列表及其信息
      */
     public List<UserFollowing> getUserFans(Long userId) {
         // 获取关注了当前用户的粉丝
@@ -133,7 +133,7 @@ public class UserFollowingService {
         for (UserFollowing fan : fanList) {
             // 将用户信息赋值给每一个粉丝
             for (UserInfo userInfo : userInfoList) {
-                // 判断是否与用户信息的用户ID 相等
+                // 判断是否与用户信息的用户 ID 相等
                 if (userInfo.getUserId().equals(fan.getUserId())) {
                     userInfo.setFollowed(false);
                     fan.setUserInfo(userInfo);
@@ -147,5 +147,28 @@ public class UserFollowingService {
             }
         }
         return fanList;
+    }
+
+    /**
+     * 添加关注分组
+     *
+     * @return 分组 ID
+     */
+    public Long saveUserFollowingGroup(FollowingGroup followingGroup) {
+        Date now = new Date();
+        followingGroup.setCreateTime(now);
+        followingGroup.setUpdateTime(now);
+        followingGroup.setType(UserConstant.USER_CUSTOM_FOLLOWING_GROUP_TYPE);
+        return followingGroupService.saveFollowingGroup(followingGroup);
+    }
+
+    /**
+     * 获取用户关注分组
+     *
+     * @param userId 用户 ID
+     * @return 关注分组集合
+     */
+    public List<FollowingGroup> getUserFollowingGroups(Long userId) {
+        return followingGroupService.getUserFollowingGroups(userId);
     }
 }

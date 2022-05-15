@@ -39,4 +39,9 @@ public class UserConstant {
      * 用户关注全部分组名
      */
     public static final String USER_FOLLOWING_GROUP_ALL_NAME = "全部分组";
+
+    /**
+     * 用户自定义分组
+     */
+    public static final String USER_CUSTOM_FOLLOWING_GROUP_TYPE = "3";
 }
