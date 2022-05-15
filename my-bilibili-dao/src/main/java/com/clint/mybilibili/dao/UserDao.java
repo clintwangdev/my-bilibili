@@ -34,4 +34,9 @@ public interface UserDao {
      * 根据用户 ID 获取用户信息
      */
     UserInfo getUserInfoByUserId(Long userId);
+
+    /**
+     * 修改用户信息
+     */
+    Integer updateUserInfos(UserInfo userInfo);
 }

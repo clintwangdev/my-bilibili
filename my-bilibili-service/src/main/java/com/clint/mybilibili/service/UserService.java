@@ -115,4 +115,12 @@ public class UserService {
         user.setUserInfo(userInfo);
         return user;
     }
+
+    /**
+     * 修改用户信息
+     */
+    public void updateUserInfos(UserInfo userInfo) {
+        userInfo.setUpdateTime(new Date());
+        userDao.updateUserInfos(userInfo);
+    }
 }
