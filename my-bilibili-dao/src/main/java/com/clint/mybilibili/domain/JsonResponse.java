@@ -1,5 +1,7 @@
 package com.clint.mybilibili.domain;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -8,21 +10,25 @@ import lombok.Data;
  * @param <T> 返回数据类型
  */
 @Data
+@ApiModel(value = "JSON 数据返回类")
 public class JsonResponse<T> {
 
     /**
      * 状态码
      */
+    @ApiModelProperty(value = "响应状态码")
     private String code;
 
     /**
      * 响应消息
      */
+    @ApiModelProperty(value = "响应消息")
     private String msg;
 
     /**
      * 响应数据
      */
+    @ApiModelProperty(value = "响应数据")
     private T data;
 
     private JsonResponse(String code, String msg) {
