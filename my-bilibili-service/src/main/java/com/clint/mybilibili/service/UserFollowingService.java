@@ -171,4 +171,22 @@ public class UserFollowingService {
     public List<FollowingGroup> getUserFollowingGroups(Long userId) {
         return followingGroupService.getUserFollowingGroups(userId);
     }
+
+    /**
+     * 检查关注状态
+     */
+    public List<UserInfo> checkFollowingStatus(List<UserInfo> list, Long userId) {
+        // 获取当前用户关注列表
+        List<UserFollowing> userFollowingList = userFollowingDao.getUserFollowings(userId);
+        // 将所有用户信息列表设置是否关注
+        for (UserInfo userInfo : list) {
+            userInfo.setFollowed(false);
+            for (UserFollowing userFollowing : userFollowingList) {
+                if (userFollowing.getFollowingId().equals(userInfo.getUserId())) {
+                    userInfo.setFollowed(true);
+                }
+            }
+        }
+        return list;
+    }
 }

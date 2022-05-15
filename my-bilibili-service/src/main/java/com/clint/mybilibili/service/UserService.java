@@ -1,6 +1,8 @@
 package com.clint.mybilibili.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.clint.mybilibili.dao.UserDao;
+import com.clint.mybilibili.domain.PageResult;
 import com.clint.mybilibili.domain.User;
 import com.clint.mybilibili.domain.UserInfo;
 import com.clint.mybilibili.domain.constant.UserConstant;
@@ -12,6 +14,7 @@ import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -143,5 +146,23 @@ public class UserService {
     public List<UserInfo> getUserInfoByUserIds(Set<Long> followingIdSet) {
         List<UserInfo> userInfoList = userDao.getUserInfoByUserIds(followingIdSet);
         return userInfoList;
+    }
+
+    /**
+     * 分页获取用户信息
+     */
+    public PageResult<UserInfo> pageListUserInfos(JSONObject params) {
+        Integer no = params.getInteger("no");
+        Integer size = params.getInteger("size");
+        params.put("start", (no - 1) * size);
+        params.put("limit", size);
+        // 获取符合条件的总条数
+        Integer count = userDao.pageCountUserInfos(params);
+        List<UserInfo> userInfoList = new ArrayList<>();
+        // 判断总条数是否大于 0
+        if (count > 0) {
+            userInfoList = userDao.pageListUserInfos(params);
+        }
+        return new PageResult<>(count, userInfoList);
     }
 }

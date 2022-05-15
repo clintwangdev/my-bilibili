@@ -119,4 +119,32 @@
         </where>
     </select>
 
+    <!-- 获取符合条件的总条数 -->
+    <select id="pageCountUserInfos" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select
+            count(1)
+        from
+            t_user_info
+        <where>
+            <if test="nick != null and nick != ''">
+                and nick = #{nick},
+            </if>
+        </where>
+    </select>
+
+    <!-- 获取用户信息集合 -->
+    <select id="pageListUserInfos" parameterType="java.util.Map" resultType="com.clint.mybilibili.domain.UserInfo">
+        select
+            *
+        from
+            t_user_info
+        <where>
+            <if test="nick != null and nick != ''">
+                and nick = #{nick},
+            </if>
+        </where>
+        order by id desc
+        limit #{start}, #{limit}
+    </select>
+
 </mapper>
