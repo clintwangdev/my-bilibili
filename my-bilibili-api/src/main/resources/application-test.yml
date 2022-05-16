@@ -7,11 +7,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   # Redis
   redis:
-    host: 127.0.0.1
+    host: 192.168.216.150
     port: 6379
 # RocketMQ
 rocketmq:
   name:
     server:
-      address: 127.0.0.1:9876
+      address: 192.168.216.150:9876
 
