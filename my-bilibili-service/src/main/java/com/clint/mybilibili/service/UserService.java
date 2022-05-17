@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.PreferredConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 @Service
@@ -212,7 +213,8 @@ public class UserService {
 
     /**
      * 退出登录
-     * @param userId 用户 ID
+     *
+     * @param userId       用户 ID
      * @param refreshToken 刷新令牌
      */
     public void logout(Long userId, String refreshToken) {

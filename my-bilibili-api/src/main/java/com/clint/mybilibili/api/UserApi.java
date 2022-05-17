@@ -125,6 +125,7 @@ public class UserApi {
      * 退出登录
      */
     @DeleteMapping("/refresh-tokens")
+    @ApiOperation(value = "退出登录")
     public JsonResponse<String> logout(HttpServletRequest request) {
         String refreshToken = request.getHeader("refreshToken");
         Long userId = userSupport.getCurrentId();
@@ -136,6 +137,7 @@ public class UserApi {
      * 刷新 token
      */
     @PostMapping("/access-tokens")
+    @ApiOperation(value = "刷新 Token")
     public JsonResponse<String> refreshAccessToken(HttpServletRequest request) throws Exception {
         String refreshToken = request.getHeader("refreshToken");
         String accessToken = userService.refreshAccessToken(refreshToken);
