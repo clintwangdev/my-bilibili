@@ -3,6 +3,9 @@ package com.clint.mybilibili.api;
 import com.clint.mybilibili.api.support.UserSupport;
 import com.clint.mybilibili.domain.JsonResponse;
 import com.clint.mybilibili.domain.UserMoments;
+import com.clint.mybilibili.domain.annotation.ApiLimitedRole;
+import com.clint.mybilibili.domain.annotation.DataLimited;
+import com.clint.mybilibili.domain.constant.AuthRoleConstant;
 import com.clint.mybilibili.service.UserMomentsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +30,8 @@ public class UserMomentsApi {
     @Autowired
     private UserSupport userSupport;
 
+    @ApiLimitedRole(limitedRoleCodeList = {AuthRoleConstant.ROLE_LV_0})
+    @DataLimited
     @PostMapping("/user-moments")
     @ApiOperation(value = "添加用户动态")
     public JsonResponse<String> saveUserMoments(@RequestBody UserMoments userMoments) throws MQBrokerException, RemotingException, InterruptedException, MQClientException {
