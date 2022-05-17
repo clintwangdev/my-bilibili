@@ -6,7 +6,6 @@ import com.clint.mybilibili.dao.UserMomentsDao;
 import com.clint.mybilibili.domain.UserMoments;
 import com.clint.mybilibili.domain.constant.UserMomentsConstant;
 import com.clint.mybilibili.service.util.RocketMQUtil;
-import com.mysql.cj.util.StringUtils;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
@@ -35,7 +34,8 @@ public class UserMomentsService {
     /**
      * 添加用户动态
      */
-    public void saveUserMoments(UserMoments userMoments) throws MQBrokerException, RemotingException, InterruptedException, MQClientException {
+    public void saveUserMoments(UserMoments userMoments) throws MQBrokerException, RemotingException,
+            InterruptedException, MQClientException {
         Date now = new Date();
         userMoments.setCreateTime(now);
         userMoments.setUpdateTime(now);
