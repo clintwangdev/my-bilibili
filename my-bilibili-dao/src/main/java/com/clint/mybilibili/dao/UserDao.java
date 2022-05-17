@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.clint.mybilibili.domain.User;
 import com.clint.mybilibili.domain.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,7 @@ public interface UserDao {
      * @param userIdList 关注用户 ID 集合
      * @return 用户信息集合
      */
-    List<UserInfo> getUserInfoByUserIds(Set<Long> userIdList);
+    List<UserInfo> getUserInfoByUserIds(@Param("userIdList") Set<Long> userIdList);
 
     /**
      * 获取符合条件的总条数

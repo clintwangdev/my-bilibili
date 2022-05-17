@@ -21,4 +21,6 @@ public class AuthRoleElementOperation {
 
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
+
+    private AuthElementOperation authElementOperation;
 }

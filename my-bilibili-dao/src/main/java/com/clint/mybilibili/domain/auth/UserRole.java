@@ -21,4 +21,10 @@ public class UserRole {
 
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
+
+    @ApiModelProperty(value = "角色名称")
+    private String roleName;
+
+    @ApiModelProperty(value = "角色编码")
+    private String roleCode;
 }

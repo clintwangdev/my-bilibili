@@ -17,8 +17,10 @@ public class AuthRoleMenu {
     private Long roleId;
 
     @ApiModelProperty(value = "页面菜单 ID")
-    private Long elementOperationId;
+    private Long menuId;
 
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
+
+    private AuthMenu authMenu;
 }
