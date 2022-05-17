@@ -18,4 +18,19 @@
             ur.userId = #{userId}
     </select>
 
+    <!-- 添加用户角色 -->
+    <insert id="saveUserRole" parameterType="com.clint.mybilibili.domain.auth.UserRole">
+        insert into
+            t_user_role(
+                userId,
+                roleId,
+                createTime
+            )
+        values (
+                #{userId},
+                #{roleId},
+                #{createTime}
+               )
+    </insert>
+
 </mapper>

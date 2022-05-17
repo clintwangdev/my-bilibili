@@ -1,9 +1,7 @@
 package com.clint.mybilibili.service;
 
-import com.clint.mybilibili.domain.auth.AuthRoleElementOperation;
-import com.clint.mybilibili.domain.auth.AuthRoleMenu;
-import com.clint.mybilibili.domain.auth.UserAuthorities;
-import com.clint.mybilibili.domain.auth.UserRole;
+import com.clint.mybilibili.domain.auth.*;
+import com.clint.mybilibili.domain.constant.AuthRoleConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,5 +36,18 @@ public class UserAuthService {
         // 获取角色所拥有的菜单权限
         List<AuthRoleMenu> authRoleMenuList = authRoleService.getRoleMenusByRoleIds(roleIdSet);
         return new UserAuthorities(authRoleElementOperationList, authRoleMenuList);
+    }
+
+    /**
+     * 为用户添加默认角色
+     *
+     * @param userId 用户 ID
+     */
+    public void saveUserDefaultRole(Long userId) {
+        UserRole userRole = new UserRole();
+        AuthRole role = authRoleService.getRoleByCode(AuthRoleConstant.ROLE_LV_0);
+        userRole.setUserId(userId);
+        userRole.setRoleId(role.getId());
+        userRoleService.saveUserRole(userRole);
     }
 }

@@ -5,6 +5,7 @@ import com.clint.mybilibili.dao.UserDao;
 import com.clint.mybilibili.domain.PageResult;
 import com.clint.mybilibili.domain.User;
 import com.clint.mybilibili.domain.UserInfo;
+import com.clint.mybilibili.domain.auth.UserRole;
 import com.clint.mybilibili.domain.constant.UserConstant;
 import com.clint.mybilibili.domain.exception.ConditionException;
 import com.clint.mybilibili.service.util.MD5Util;
@@ -24,6 +25,9 @@ public class UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private UserAuthService userAuthService;
 
     /**
      * 保存用户
@@ -68,6 +72,8 @@ public class UserService {
         userInfo.setCreateTime(now);
         userInfo.setUpdateTime(now);
         userDao.saveUserInfo(userInfo);
+        // 为用户分配默认角色
+        userAuthService.saveUserDefaultRole(user.getId());
     }
 
     /**
