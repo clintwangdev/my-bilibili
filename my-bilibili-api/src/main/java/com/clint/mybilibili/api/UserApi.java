@@ -17,7 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -107,5 +109,36 @@ public class UserApi {
             pageList.setList(checkedUserInfoList);
         }
         return JsonResponse.success(pageList);
+    }
+
+    /**
+     * 用户登录, 返回双 token
+     */
+    @PostMapping("/user-dts")
+    @ApiOperation(value = "用户登录, 返回双 token")
+    public JsonResponse<Map<String, Object>> loginForDts(@RequestBody User user) throws Exception {
+        Map<String, Object> map = userService.loginForDts(user);
+        return JsonResponse.success(map);
+    }
+
+    /**
+     * 退出登录
+     */
+    @DeleteMapping("/refresh-tokens")
+    public JsonResponse<String> logout(HttpServletRequest request) {
+        String refreshToken = request.getHeader("refreshToken");
+        Long userId = userSupport.getCurrentId();
+        userService.logout(userId, refreshToken);
+        return JsonResponse.success();
+    }
+
+    /**
+     * 刷新 token
+     */
+    @PostMapping("/access-tokens")
+    public JsonResponse<String> refreshAccessToken(HttpServletRequest request) throws Exception {
+        String refreshToken = request.getHeader("refreshToken");
+        String accessToken = userService.refreshAccessToken(refreshToken);
+        return JsonResponse.success(accessToken);
     }
 }

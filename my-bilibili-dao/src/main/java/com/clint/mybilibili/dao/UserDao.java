@@ -1,11 +1,13 @@
 package com.clint.mybilibili.dao;
 
 import com.alibaba.fastjson.JSONObject;
+import com.clint.mybilibili.domain.RefreshTokenDetail;
 import com.clint.mybilibili.domain.User;
 import com.clint.mybilibili.domain.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,4 +65,21 @@ public interface UserDao {
      * 获取用户信息集合
      */
     List<UserInfo> pageListUserInfos(Map params);
+
+    /**
+     * 删除 refresh token
+     */
+    void removeRefreshToken(@Param("userId") Long userId, @Param("refreshToken") String refreshToken);
+
+    /**
+     * 添加 refresh token
+     */
+    void saveRefreshToken(@Param("userId") Long userId,
+                          @Param("refreshToken") String refreshToken,
+                          @Param("createTime") Date creatTime);
+
+    /**
+     * 获取刷新 token
+     */
+    RefreshTokenDetail getRefreshToken(String refreshToken);
 }

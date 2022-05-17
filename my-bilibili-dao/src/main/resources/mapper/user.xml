@@ -102,7 +102,7 @@
         where
             userId = #{userId}
     </update>
-    
+
     <!-- 根据关注用户 ID 集合批量查询用户信息 -->
     <select id="getUserInfoByUserIds" resultType="com.clint.mybilibili.domain.UserInfo">
         select
@@ -146,5 +146,37 @@
         order by id desc
         limit #{start}, #{limit}
     </select>
+
+    <select id="getRefreshToken" parameterType="java.lang.String" resultType="com.clint.mybilibili.domain.RefreshTokenDetail">
+        select
+            *
+        from
+            t_refresh_token
+        where
+            refreshToken = #{refreshToken}
+    </select>
+
+    <!-- 删除 refresh token -->
+    <delete id="removeRefreshToken">
+        delete from
+            t_refresh_token
+        where
+            refreshToken = #{refreshToken}
+    </delete>
+
+    <!-- 添加 refresh token -->
+    <insert id="saveRefreshToken">
+        insert into
+            t_refresh_token(
+                userId,
+                refreshToken,
+                createTime
+            )
+        values (
+                #{userId},
+                #{refreshToken},
+                #{createTime}
+               )
+    </insert>
 
 </mapper>
