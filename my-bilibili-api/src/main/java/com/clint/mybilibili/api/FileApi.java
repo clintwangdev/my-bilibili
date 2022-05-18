@@ -16,7 +16,8 @@ public class FileApi {
     private FileService fileService;
 
     @PutMapping("/file-slices")
-    public JsonResponse<String> uploadFileBySlices(MultipartFile slice, String fileMd5, Integer sliceNo, Integer totalSliceNo) throws IOException {
+    public JsonResponse<String> uploadFileBySlices(MultipartFile slice, String fileMd5, Integer sliceNo,
+                                                   Integer totalSliceNo) throws IOException {
         String filePath = fileService.uploadFileBySlices(slice, fileMd5, sliceNo, totalSliceNo);
         return JsonResponse.success(filePath);
     }

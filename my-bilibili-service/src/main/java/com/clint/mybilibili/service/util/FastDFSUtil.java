@@ -96,7 +96,8 @@ public class FastDFSUtil {
      * @param totalSliceNo 总分片数
      * @return
      */
-    public String uploadFileBySlices(MultipartFile file, String fileMD5, Integer sliceNo, Integer totalSliceNo) throws IOException {
+    public String uploadFileBySlices(MultipartFile file, String fileMD5, Integer sliceNo, Integer totalSliceNo)
+            throws IOException {
         if (file == null || sliceNo == null || totalSliceNo == null) {
             throw new ConditionException("参数异常！");
         }

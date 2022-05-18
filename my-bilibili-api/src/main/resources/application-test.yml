@@ -22,4 +22,5 @@ rocketmq:
       address: 192.168.216.150:9876
 # FastDFS
 fdfs:
+  # 调度者集群
   tracker-list: 192.168.216.141:22122

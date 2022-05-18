@@ -22,7 +22,8 @@ public class FileService {
      * @param totalSliceNo 总分片数
      * @return
      */
-    public String uploadFileBySlices(MultipartFile slice, String fileMd5, Integer sliceNo, Integer totalSliceNo) throws IOException {
+    public String uploadFileBySlices(MultipartFile slice, String fileMd5, Integer sliceNo, Integer totalSliceNo)
+            throws IOException {
         return fastDFSUtil.uploadFileBySlices(slice, fileMd5, sliceNo, totalSliceNo);
     }
 }
