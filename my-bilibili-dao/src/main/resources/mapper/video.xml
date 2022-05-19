@@ -77,4 +77,59 @@
         limit #{start}, #{limit}
     </select>
 
+    <!-- 根据ID获取视频 -->
+    <select id="getVideoById" parameterType="java.lang.Long" resultType="com.clint.mybilibili.domain.Video">
+        select
+            *
+        from
+            t_video
+        where
+            id = #{id}
+    </select>
+
+    <!-- 根据视频id和用户id查询点赞视频 -->
+    <select id="getVideoLikeByUserIdAndVideoId" resultType="com.clint.mybilibili.domain.VideoLike">
+        select
+            *
+        from
+            t_video_like
+        where
+            userId = #{userId}
+            and videoId = #{videoId}
+    </select>
+
+    <!-- 添加视频点赞 -->
+    <insert id="saveVideoLike" parameterType="com.clint.mybilibili.domain.VideoLike">
+        insert into
+            t_video_like(
+                userId,
+                videoId,
+                createTime
+            )
+        values (
+                #{userId},
+                #{videoId},
+                #{createTime}
+               )
+    </insert>
+
+    <!-- 取消视频点赞 -->
+    <delete id="removeVideoLike">
+        delete from
+            t_video_like
+        where
+            userId = #{userId}
+            and videoId = #{videoId}
+    </delete>
+
+    <!-- 获取视频点赞数量 -->
+    <select id="getVideoLikes" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select
+            *
+        from
+            t_video_like
+        where
+            videoId = #{videoId}
+    </select>
+
 </mapper>

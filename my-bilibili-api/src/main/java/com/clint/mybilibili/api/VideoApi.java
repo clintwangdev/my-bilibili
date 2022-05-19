@@ -10,10 +10,11 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 @Api(tags = "视频接口")
 @RestController
@@ -44,5 +45,39 @@ public class VideoApi {
     public JsonResponse<PageResult<Video>> pageListVideos(Integer no, Integer size, String area) {
         PageResult<Video> pageResult = videoService.pageListVideos(no, size, area);
         return JsonResponse.success(pageResult);
+    }
+
+    @GetMapping("/video-slices")
+    @ApiOperation(value = "在线观看视频")
+    public void viewVideoOnlineBySlices(HttpServletRequest request, HttpServletResponse response, String url) throws Exception {
+        videoService.viewVideoOnlineBySlices(request, response, url);
+    }
+
+    @PostMapping("/video-likes")
+    @ApiOperation(value = "视频点赞")
+    public JsonResponse<String> saveVideoLike(@RequestParam Long videoId) {
+        Long userId = userSupport.getCurrentId();
+        videoService.saveVideoLike(userId, videoId);
+        return JsonResponse.success();
+    }
+
+    @DeleteMapping("/video-likes")
+    @ApiOperation(value = "取消点赞")
+    public JsonResponse<String> removeVideoLike(@RequestParam Long videoId) {
+        Long userId = userSupport.getCurrentId();
+        videoService.removeVideoLike(userId, videoId);
+        return JsonResponse.success();
+    }
+
+    @GetMapping("/video-likes")
+    @ApiOperation(value = "获取视频点赞数量")
+    public JsonResponse<Map<String, Object>> getVideoLikes(@RequestParam Long videoId) {
+        Long userId = null;
+        try {
+            userId = userSupport.getCurrentId();
+        } catch (Exception e) {
+        }
+        Map<String, Object> result = videoService.getVideoLikes(userId, videoId);
+        return JsonResponse.success(result);
     }
 }
