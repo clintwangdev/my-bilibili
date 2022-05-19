@@ -6,7 +6,6 @@ import com.clint.mybilibili.domain.PageResult;
 import com.clint.mybilibili.domain.RefreshTokenDetail;
 import com.clint.mybilibili.domain.User;
 import com.clint.mybilibili.domain.UserInfo;
-import com.clint.mybilibili.domain.auth.UserRole;
 import com.clint.mybilibili.domain.constant.UserConstant;
 import com.clint.mybilibili.domain.exception.ConditionException;
 import com.clint.mybilibili.service.util.MD5Util;
@@ -14,7 +13,6 @@ import com.clint.mybilibili.service.util.RSAUtil;
 import com.clint.mybilibili.service.util.TokenUtil;
 import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mapping.PreferredConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

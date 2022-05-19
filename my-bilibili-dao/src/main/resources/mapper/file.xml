@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clint.mybilibili.dao.FileDao">
+
+    <!-- 根据文件MD5标识获取文件 -->
+    <select id="getFileByMD5" parameterType="java.lang.String" resultType="com.clint.mybilibili.domain.File">
+        select
+            *
+        from
+            t_file
+        where
+            md5 = #{md5}
+    </select>
+
+    <!-- 添加文件 -->
+    <insert id="saveFile" parameterType="com.clint.mybilibili.domain.File">
+        insert into
+            t_file(
+                url,
+                type,
+                md5,
+                createTime
+            )
+        values (
+                #{url},
+                #{type},
+                #{md5},
+                #{createTime}
+               )
+    </insert>
+
+</mapper>

@@ -55,7 +55,6 @@ public class FastDFSUtil {
         String filename = file.getOriginalFilename();
         int suffixIndex = filename.lastIndexOf(".");
         String suffixName = filename.substring(suffixIndex + 1);
-        System.out.println(suffixName);
         return suffixName;
     }
 
@@ -112,7 +111,7 @@ public class FastDFSUtil {
         }
         String fileType = this.getFileType(file);
         if (sliceNo.equals(1)) {
-            // 上传的是第一个分片，进行文件上传
+            // 如果上传的是第一个分片，则进行文件上传
             String path = this.uploadAppenderFile(file);
             if (StringUtils.isNullOrEmpty(path)) {
                 throw new ConditionException("上传失败！");
