@@ -132,4 +132,99 @@
             videoId = #{videoId}
     </select>
 
+    <!-- 删除视频收藏 -->
+    <delete id="removeVideoCollection" parameterType="com.clint.mybilibili.domain.VideoCollection">
+        delete from
+            t_video_collection
+        where
+            userId = #{userId}
+            and videoId = #{videoId}
+    </delete>
+
+    <!-- 添加视频收藏 -->
+    <insert id="saveVideoCollection" parameterType="com.clint.mybilibili.domain.VideoCollection">
+        insert into
+            t_video_collection(
+                videoId,
+                userId,
+                groupId,
+                createTime
+            )
+        values (
+                #{videoId},
+                #{userId},
+                #{groupId},
+                #{createTime}
+               )
+    </insert>
+
+    <!-- 获取视频收藏量 -->
+    <select id="getVideoCollections" resultType="java.lang.Long">
+        select
+            count(1)
+        from
+            t_video_collection
+        where
+            videoId = #{videoId}
+    </select>
+
+    <!-- 根据用户id和视频id获取视频收藏 -->
+    <select id="getVideoCollectionByUserIdAndVideoId" resultType="com.clint.mybilibili.domain.VideoCollection">
+        select
+            *
+        from
+            t_video_collection
+        where
+            userId = #{userId}
+            and videoId = #{videoId}
+    </select>
+
+    <!-- 添加收藏分组 -->
+    <insert id="saveCollectionGroup" parameterType="com.clint.mybilibili.domain.CollectionGroup">
+        insert into
+            t_collection_group(
+                userId,
+                `name`,
+                `type`,
+                createTime
+            )
+        values (
+                #{userId},
+                #{name},
+                #{type},
+                #{createTime}
+               )
+    </insert>
+
+    <!-- 获取用户收藏分组 -->
+    <select id="getUserCollectionGroups" parameterType="java.lang.Long" resultType="com.clint.mybilibili.domain.CollectionGroup">
+        select
+            *
+        from
+            t_user_collection
+        where
+            userId = #{userId}
+            or `type` = '0'
+    </select>
+
+    <!-- 根据id获取收藏分组 -->
+    <select id="getCollectionById" parameterType="java.lang.Long" resultType="com.clint.mybilibili.domain.CollectionGroup">
+        select
+            *
+        from
+            t_collection_group
+        where
+            id = #{id}
+    </select>
+
+    <!-- 获取用户默认分组 -->
+    <select id="getUserDefaultCollectionGroup" parameterType="java.lang.Long" resultType="com.clint.mybilibili.domain.CollectionGroup">
+        select
+            *
+        from
+            t_user_collection
+        where
+            userId = #{userId}
+            and `type` = '0'
+    </select>
 </mapper>

@@ -1,8 +1,6 @@
 package com.clint.mybilibili.dao;
 
-import com.clint.mybilibili.domain.Video;
-import com.clint.mybilibili.domain.VideoLike;
-import com.clint.mybilibili.domain.VideoTag;
+import com.clint.mybilibili.domain.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -29,4 +27,20 @@ public interface VideoDao {
     Integer removeVideoLike(@Param("userId") Long userId, @Param("videoId") Long videoId);
 
     Long getVideoLikes(Long videoId);
+
+    Integer removeVideoCollection(VideoCollection videoCollection);
+
+    Integer saveVideoCollection(VideoCollection videoCollection);
+
+    Long getVideoCollections(Long videoId);
+
+    VideoCollection getVideoCollectionByUserIdAndVideoId(@Param("userId") Long userId, @Param("videoId") Long videoId);
+
+    Integer saveCollectionGroup(CollectionGroup collectionGroup);
+
+    List<CollectionGroup> getUserCollectionGroups(Long userId);
+
+    CollectionGroup getCollectionById(Long groupId);
+
+    CollectionGroup getUserDefaultCollectionGroup(Long userId);
 }

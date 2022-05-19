@@ -1,10 +1,7 @@
 package com.clint.mybilibili.service;
 
 import com.clint.mybilibili.dao.VideoDao;
-import com.clint.mybilibili.domain.PageResult;
-import com.clint.mybilibili.domain.Video;
-import com.clint.mybilibili.domain.VideoLike;
-import com.clint.mybilibili.domain.VideoTag;
+import com.clint.mybilibili.domain.*;
 import com.clint.mybilibili.domain.exception.ConditionException;
 import com.clint.mybilibili.service.util.FastDFSUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,5 +108,86 @@ public class VideoService {
         result.put("count", count);
         result.put("like", like);
         return result;
+    }
+
+    /**
+     * 添加视频收藏
+     * x
+     */
+    @Transactional
+    public void saveVideoCollection(VideoCollection videoCollection) {
+        Long videoId = videoCollection.getVideoId();
+        Long groupId = videoCollection.getGroupId();
+        if (videoId == null || groupId == null) {
+            throw new ConditionException("参数异常！");
+        }
+        Video video = videoDao.getVideoById(videoId);
+        if (video == null) {
+            throw new ConditionException("非法视频！");
+        }
+        // 验证收藏分组是否存在
+        CollectionGroup collectionGroup = videoDao.getCollectionById(groupId);
+        if (collectionGroup == null) {
+            // 获取该用户默认分组ID
+            CollectionGroup userCollectionGroup = videoDao.getUserDefaultCollectionGroup(videoCollection.getUserId());
+            videoCollection.setGroupId(userCollectionGroup.getId());
+        }
+        // 删除原有视频收藏
+        videoDao.removeVideoCollection(videoCollection);
+        // 添加新的视频收藏
+        videoCollection.setCreateTime(new Date());
+        videoDao.saveVideoCollection(videoCollection);
+    }
+
+    /**
+     * 删除视频收藏
+     */
+    public void removeVideoCollection(Long userId, Long videoId) {
+        VideoCollection videoCollection = new VideoCollection();
+        videoCollection.setUserId(userId);
+        videoCollection.setVideoId(videoId);
+        videoDao.removeVideoCollection(videoCollection);
+    }
+
+    /**
+     * 获取视频收藏量
+     */
+    public Map<String, Object> getVideoCollections(Long videoId, Long userId) {
+        Long count = videoDao.getVideoCollections(videoId);
+        VideoCollection videoCollection = videoDao.getVideoCollectionByUserIdAndVideoId(userId, videoId);
+        boolean like = videoCollection != null;
+        Map<String, Object> result = new HashMap<>();
+        result.put("count", count);
+        result.put("like", like);
+        return result;
+    }
+
+    /**
+     * 添加收藏分组
+     */
+    public void saveCollectionGroup(CollectionGroup collectionGroup) {
+        collectionGroup.setCreateTime(new Date());
+        // 设为自定义分组类型
+        collectionGroup.setType("1");
+        videoDao.saveCollectionGroup(collectionGroup);
+    }
+
+    /**
+     * 获取用户收藏分组
+     */
+    public List<CollectionGroup> getUserCollectionGroups(Long userId) {
+        return videoDao.getUserCollectionGroups(userId);
+    }
+
+    /**
+     * 为角色分配默认分组
+     */
+    public void saveUserDefaultCollectionGroup(Long userId) {
+        CollectionGroup collectionGroup = new CollectionGroup();
+        collectionGroup.setUserId(userId);
+        collectionGroup.setName("默认分组");
+        collectionGroup.setType("0");
+        collectionGroup.setCreateTime(new Date());
+        videoDao.saveCollectionGroup(collectionGroup);
     }
 }

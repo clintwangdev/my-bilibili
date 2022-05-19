@@ -1,9 +1,7 @@
 package com.clint.mybilibili.api;
 
 import com.clint.mybilibili.api.support.UserSupport;
-import com.clint.mybilibili.domain.JsonResponse;
-import com.clint.mybilibili.domain.PageResult;
-import com.clint.mybilibili.domain.Video;
+import com.clint.mybilibili.domain.*;
 import com.clint.mybilibili.service.VideoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 @Api(tags = "视频接口")
@@ -75,9 +74,56 @@ public class VideoApi {
         Long userId = null;
         try {
             userId = userSupport.getCurrentId();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         Map<String, Object> result = videoService.getVideoLikes(userId, videoId);
         return JsonResponse.success(result);
+    }
+
+
+    @PostMapping("/video-collections")
+    @ApiOperation(value = "添加视频收藏")
+    public JsonResponse<String> saveVideoCollection(@RequestBody VideoCollection videoCollection) {
+        Long userId = userSupport.getCurrentId();
+        videoCollection.setUserId(userId);
+        videoService.saveVideoCollection(videoCollection);
+        return JsonResponse.success();
+    }
+
+    @DeleteMapping("/video-collections")
+    @ApiOperation(value = "取消视频收藏")
+    public JsonResponse<String> removeVideoCollection(@RequestParam Long videoId) {
+        Long userId = userSupport.getCurrentId();
+        videoService.removeVideoCollection(userId, videoId);
+        return JsonResponse.success();
+    }
+
+    @GetMapping("/video-collections")
+    @ApiOperation(value = "获取视频收藏量")
+    public JsonResponse<Map<String, Object>> getVideoCollections(@RequestParam Long videoId) {
+        Long userId = null;
+        try {
+            userId = userSupport.getCurrentId();
+        } catch (Exception ignored) {
+        }
+        Map<String, Object> result = videoService.getVideoCollections(videoId, userId);
+        return JsonResponse.success(result);
+    }
+
+    @PostMapping("/collection-groups")
+    @ApiOperation(value = "添加收藏分组")
+    public JsonResponse<String> saveCollectionGroup(@RequestBody CollectionGroup collectionGroup) {
+        Long userId = userSupport.getCurrentId();
+        collectionGroup.setUserId(userId);
+        videoService.saveCollectionGroup(collectionGroup);
+        return JsonResponse.success();
+    }
+
+    @GetMapping("/collection-groups")
+    @ApiOperation(value = "获取用户收藏分组")
+    public JsonResponse<List<CollectionGroup>> getUserCollectionGroups() {
+        Long userId = userSupport.getCurrentId();
+        List<CollectionGroup> collectionGroupList = videoService.getUserCollectionGroups(userId);
+        return JsonResponse.success(collectionGroupList);
     }
 }

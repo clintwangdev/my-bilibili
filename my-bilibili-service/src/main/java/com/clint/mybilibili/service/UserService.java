@@ -26,6 +26,9 @@ public class UserService {
     @Autowired
     private UserAuthService userAuthService;
 
+    @Autowired
+    private VideoService videoService;
+
     /**
      * 保存用户
      */
@@ -71,6 +74,8 @@ public class UserService {
         userDao.saveUserInfo(userInfo);
         // 为用户分配默认角色
         userAuthService.saveUserDefaultRole(user.getId());
+        // 为角色分配默认收藏分组
+        videoService.saveUserDefaultCollectionGroup(user.getId());
     }
 
     /**
