@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface VideoDao {
@@ -13,4 +14,8 @@ public interface VideoDao {
     Integer saveVideos(Video video);
 
     Integer batchSaveVideoTags(@Param("videoTagList") List<VideoTag> videoTagList);
+
+    Integer pageCountVideos(String area);
+
+    List<Video> pageListVideos(Map<String, Object> params);
 }

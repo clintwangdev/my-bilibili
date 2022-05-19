@@ -10,7 +10,7 @@
                 url,
                 thumbnail,
                 title,
-                type,
+                `type`,
                 duration,
                 area,
                 description,
@@ -40,13 +40,41 @@
                 createTime
             )
         values
-        <foreach collection="videoTagList" item="videoTag" separator=",">
-            (
+            <foreach collection="videoTagList" item="videoTag" separator=",">
+                (
                 #{videoTag.videoId},
                 #{videoTag.tagId},
                 #{videoTag.createTime}
-            )
-        </foreach>
+                )
+            </foreach>
     </insert>
+
+    <!-- 获取符合条件的视频总条数 -->
+    <select id="pageCountVideos" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select
+            count(1)
+        from
+            t_video
+        <where>
+            <if test="area != null and area != ''">
+                area = #{area}
+            </if>
+        </where>
+    </select>
+
+    <!-- 分页获取视频 -->
+    <select id="pageListVideos" parameterType="java.util.Map" resultType="com.clint.mybilibili.domain.Video">
+        select
+            *
+        from
+            t_video
+        <where>
+            <if test="area != null and area != ''">
+                area = #{area}
+            </if>
+        </where>
+        order by id desc
+        limit #{start}, #{limit}
+    </select>
 
 </mapper>
