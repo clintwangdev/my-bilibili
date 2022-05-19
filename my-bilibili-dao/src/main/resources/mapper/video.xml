@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clint.mybilibili.dao.VideoDao">
+
+    <!-- 添加视频 -->
+    <insert id="saveVideos" parameterType="com.clint.mybilibili.domain.Video" useGeneratedKeys="true" keyProperty="id">
+        insert into
+            t_video(
+                userId,
+                url,
+                thumbnail,
+                title,
+                type,
+                duration,
+                area,
+                description,
+                createTime,
+                updateTime
+            )
+        values (
+                #{userId},
+                #{url},
+                #{thumbnail},
+                #{title},
+                #{type},
+                #{duration},
+                #{area},
+                #{description},
+                #{createTime},
+                #{updateTime}
+               )
+    </insert>
+
+    <!-- 批量添加视频标签 -->
+    <insert id="batchSaveVideoTags" parameterType="java.util.List">
+        insert into
+            t_video_tag(
+                videoId,
+                tagId,
+                createTime
+            )
+        values
+        <foreach collection="videoTagList" item="videoTag" separator=",">
+            (
+                #{videoTag.videoId},
+                #{videoTag.tagId},
+                #{videoTag.createTime}
+            )
+        </foreach>
+    </insert>
+
+</mapper>
