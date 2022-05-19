@@ -126,4 +126,25 @@ public class VideoApi {
         List<CollectionGroup> collectionGroupList = videoService.getUserCollectionGroups(userId);
         return JsonResponse.success(collectionGroupList);
     }
+
+    @PostMapping("/video-coins")
+    @ApiOperation(value = "视频投币")
+    public JsonResponse<String> saveVideoCoins(@RequestBody VideoCoin videoCoin) {
+        Long userId = userSupport.getCurrentId();
+        videoCoin.setUserId(userId);
+        videoService.saveVideoCoins(videoCoin);
+        return JsonResponse.success();
+    }
+
+    @GetMapping("/video-coins")
+    @ApiOperation(value = "获取视频投币数量")
+    public JsonResponse<Map<String, Object>> getVideoCoins(@RequestParam Long videoId) {
+        Long userId = null;
+        try {
+            userId = userSupport.getCurrentId();
+        } catch (Exception ignored) {
+        }
+        Map<String, Object> result = videoService.getVideoCoins(userId, videoId);
+        return JsonResponse.success(result);
+    }
 }

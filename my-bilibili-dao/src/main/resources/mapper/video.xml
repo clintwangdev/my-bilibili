@@ -227,4 +227,55 @@
             userId = #{userId}
             and `type` = '0'
     </select>
+
+    <!-- 根据用户id和视频id查询视频硬币 -->
+    <select id="getVideoCoinByUserIdAndVideoId" resultType="com.clint.mybilibili.domain.VideoCoin">
+        select
+            *
+        from
+            t_video_coin
+        where
+            userId = #{userId}
+            and videoId = #{videoId}
+    </select>
+
+    <!-- 添加视频硬币 -->
+    <insert id="saveVideoCoin" parameterType="com.clint.mybilibili.domain.VideoCoin">
+        insert into
+            t_video_coin(
+                userId,
+                videoId,
+                amount,
+                createTime
+            )
+        values (
+                #{userId},
+                #{videoId},
+                #{amount},
+                #{createTime}
+               )
+    </insert>
+
+    <!-- 更新视频投币 -->
+    <update id="updateVideoCoin" parameterType="com.clint.mybilibili.domain.VideoCoin">
+        update
+            t_video_coin
+        set
+            amount = #{amount},
+            updateTime = #{updateTime}
+        where
+            userId = #{userId}
+            and videoId = #{videoId}
+    </update>
+
+    <!-- 获取视频投币数 -->
+    <select id="getVideoCoinsAmount" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select
+            sum(amount)
+        from
+            t_video_coin
+        where
+            videoId = #{videoId}
+    </select>
+
 </mapper>

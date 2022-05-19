@@ -43,4 +43,12 @@ public interface VideoDao {
     CollectionGroup getCollectionById(Long groupId);
 
     CollectionGroup getUserDefaultCollectionGroup(Long userId);
+
+    VideoCoin getVideoCoinByUserIdAndVideoId(@Param("userId") Long userId, @Param("videoId") Long videoId);
+
+    Integer saveVideoCoin(VideoCoin videoCoin);
+
+    Integer updateVideoCoin(VideoCoin videoCoin);
+
+    Long getVideoCoinsAmount(Long videoId);
 }
