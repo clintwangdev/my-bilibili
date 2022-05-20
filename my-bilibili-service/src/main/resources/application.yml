@@ -1,3 +1,4 @@
+# server
 server:
   port: 8080
 # profile
@@ -6,7 +7,12 @@ spring:
     name: my-bilibili
   profiles:
     active: test
+  # Spring Dev tools
+  devtools:
+    restart:
+      enabled: true
 # MyBatis
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.clint.mybilibili.dao
+
