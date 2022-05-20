@@ -165,4 +165,11 @@ public class VideoApi {
         PageResult<VideoComment> result = videoService.pageListVideoComments(no, size, videoId);
         return JsonResponse.success(result);
     }
+
+    @GetMapping("/video-details")
+    @ApiOperation(value = "获取视频详情")
+    public JsonResponse<Map<String, Object>> getVideoDetails(@RequestParam Long videoId) {
+        Map<String, Object> result = videoService.getVideoDetails(videoId);
+        return JsonResponse.success(result);
+    }
 }

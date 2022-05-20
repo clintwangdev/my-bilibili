@@ -308,4 +308,18 @@ public class VideoService {
         }
         return new PageResult<>(total, videoCommentList);
     }
+
+    /**
+     * 获取视频详情
+     */
+    public Map<String, Object> getVideoDetails(Long videoId) {
+        Video video = videoDao.getVideoById(videoId);
+        Long userId = video.getUserId();
+        User user = userService.getUserInfo(userId);
+        UserInfo userInfo = user.getUserInfo();
+        Map<String, Object> result = new HashMap<>();
+        result.put("video", video);
+        result.put("userInfo", userInfo);
+        return result;
+    }
 }
