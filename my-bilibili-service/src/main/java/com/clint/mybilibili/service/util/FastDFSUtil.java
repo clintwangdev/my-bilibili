@@ -45,7 +45,7 @@ public class FastDFSUtil {
 
     private static final String UPLOADED_NO_KEY = "uploaded-no-key:";
 
-    private static final Integer SLICE_SIZE = 1024 * 1024;
+    private static final Integer SLICE_SIZE = 1024 * 1024 * 5;
 
     @Value("${fdfs.http.storage-addr}")
     private String httpFdfsStorageAddr;

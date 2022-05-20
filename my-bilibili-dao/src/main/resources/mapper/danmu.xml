@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clint.mybilibili.dao.DanmuDao">
+
+    <!-- 添加弹幕 -->
+    <insert id="saveDanmu" parameterType="com.clint.mybilibili.domain.Danmu">
+        insert into
+            t_danmu(
+                userId,
+                videoId,
+                content,
+                danmuTime,
+                createTime
+            )
+        values (
+                #{userId},
+                #{videoId},
+                #{content},
+                #{danmuTime},
+                #{createTime}
+               )
+    </insert>
+
+    <!-- 获取弹幕 -->
+    <select id="getDanmus" parameterType="java.util.Map" resultType="com.clint.mybilibili.domain.Danmu">
+        select
+            *
+        from
+            t_danmu
+        where
+            videoId = #{videoId}
+            <if test="startDate != null and startDate != ''">
+                and createTime <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                and createTime <![CDATA[<=]]> #{endTime}
+            </if>
+    </select>
+
+</mapper>

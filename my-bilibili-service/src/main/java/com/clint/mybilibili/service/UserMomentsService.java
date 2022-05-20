@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.clint.mybilibili.dao.UserMomentsDao;
 import com.clint.mybilibili.domain.UserMoments;
-import com.clint.mybilibili.domain.constant.UserMomentsConstant;
+import com.clint.mybilibili.domain.constant.MQConstant;
 import com.clint.mybilibili.service.util.RocketMQUtil;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
@@ -41,7 +41,7 @@ public class UserMomentsService {
         userMoments.setUpdateTime(now);
         userMomentsDao.saveUserMoments(userMoments);
         // 向 RocketMQ 发送消息
-        Message msg = new Message(UserMomentsConstant.TOPIC_MOMENTS, JSONObject.toJSONString(userMoments)
+        Message msg = new Message(MQConstant.TOPIC_MOMENTS, JSONObject.toJSONString(userMoments)
                 .getBytes(StandardCharsets.UTF_8));
         RocketMQUtil.syncSentMsg(momentsProducer, msg);
     }

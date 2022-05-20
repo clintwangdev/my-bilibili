@@ -1,18 +1,31 @@
 package com.clint.mybilibili.service.websocket;
 
+import com.alibaba.fastjson.JSONObject;
+import com.clint.mybilibili.domain.Danmu;
+import com.clint.mybilibili.domain.constant.MQConstant;
+import com.clint.mybilibili.service.util.RocketMQUtil;
+import com.clint.mybilibili.service.util.TokenUtil;
+import io.netty.util.internal.StringUtil;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.common.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
-@ServerEndpoint("imserver")
+@ServerEndpoint("/imserver/{token}")
 public class WebSocketService {
 
     /**
@@ -22,11 +35,13 @@ public class WebSocketService {
 
     private static final AtomicInteger ONLINE_COUNT = new AtomicInteger(0);
 
-    private static final ConcurrentHashMap<String, WebSocketService> WEBSOCKET_MAP = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<String, WebSocketService> WEBSOCKET_MAP = new ConcurrentHashMap<>();
 
     private Session session;
 
     private String sessionId;
+
+    private Long userId;
 
     /**
      * 通用 Spring 上下文对象，在启动项目时进行初始化
@@ -38,7 +53,12 @@ public class WebSocketService {
     }
 
     @OnOpen
-    public void openConnection(Session session) {
+    public void openConnection(Session session, @PathParam("token") String token) {
+        try {
+            // 解析token获取用户id
+            this.userId = TokenUtil.verifyToken(token);
+        } catch (Exception ignored) {
+        }
         this.sessionId = session.getId();
         this.session = session;
         if (WEBSOCKET_MAP.containsKey(sessionId)) {
@@ -69,7 +89,33 @@ public class WebSocketService {
 
     @OnMessage
     public void onMessage(String message) {
-
+        logger.info("用户信息：{}，内容：{}", sessionId, message);
+        if (!StringUtil.isNullOrEmpty(message)) { // 如果消息不为空
+            try {
+                // 遍历每一个处理打开状态的WebSocketService
+                for (Map.Entry<String, WebSocketService> entry : WEBSOCKET_MAP.entrySet()) {
+                    DefaultMQProducer danmusProducer = APPLICATION_CONTEXT.getBean("danmusProducer", DefaultMQProducer.class);
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("sessionId", session);
+                    jsonObject.put("message", message);
+                    Message msg = new Message(MQConstant.TOPIC_DANMUS, JSONObject.toJSONString(jsonObject).getBytes(StandardCharsets.UTF_8));
+                    RocketMQUtil.asyncSendMsg(danmusProducer, msg);
+                }
+                if (userId != null) { // 如果不是游客
+                    Danmu danmu = JSONObject.parseObject(message, Danmu.class);
+                    danmu.setCreateTime(new Date());
+                    danmu.setUserId(userId);
+                    DanmuService danmuService = APPLICATION_CONTEXT.getBean("danmuService", DanmuService.class);
+                    // 异步保存弹幕到数据库
+                    danmuService.asyncSaveDanmu(danmu);
+                    // 保存弹幕到Redis
+                    danmuService.saveDanmuToRedis(danmu);
+                }
+            } catch (Exception e) {
+                logger.error("弹幕接收失败！");
+                e.printStackTrace();
+            }
+        }
     }
 
     @OnError
@@ -77,7 +123,28 @@ public class WebSocketService {
 
     }
 
-    private void sendMessage(String message) throws IOException {
+    public void sendMessage(String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    @Scheduled(fixedRate = 5000)
+    public void noticeOnlineCount() throws IOException {
+        for (Map.Entry<String, WebSocketService> entry : WEBSOCKET_MAP.entrySet()) {
+            WebSocketService webSocketService = entry.getValue();
+            if (webSocketService.getSession().isOpen()) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("onlineCount", ONLINE_COUNT.get());
+                jsonObject.put("msg", "当前在线人数为：" + ONLINE_COUNT.get());
+                this.sendMessage(jsonObject.toJSONString());
+            }
+        }
     }
 }
