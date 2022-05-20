@@ -92,7 +92,7 @@ public class WebSocketService {
         logger.info("用户信息：{}，内容：{}", sessionId, message);
         if (!StringUtil.isNullOrEmpty(message)) { // 如果消息不为空
             try {
-                // 遍历每一个处理打开状态的WebSocketService
+                // 遍历每一个处于打开状态的WebSocketService
                 for (Map.Entry<String, WebSocketService> entry : WEBSOCKET_MAP.entrySet()) {
                     DefaultMQProducer danmusProducer = APPLICATION_CONTEXT.getBean("danmusProducer", DefaultMQProducer.class);
                     JSONObject jsonObject = new JSONObject();
