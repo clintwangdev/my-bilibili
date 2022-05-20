@@ -179,4 +179,17 @@
                )
     </insert>
 
+    <!-- 批量查询用户信息 -->
+    <select id="batchGetUserInfosByUserIds" parameterType="java.util.Set" resultType="com.clint.mybilibili.domain.UserInfo">
+        select
+            *
+        from
+            t_user_info
+        where
+            userId in
+            <foreach collection="userIdList" item="userId" open="(" separator="," close=")">
+                #{userId}
+            </foreach>
+    </select>
+
 </mapper>

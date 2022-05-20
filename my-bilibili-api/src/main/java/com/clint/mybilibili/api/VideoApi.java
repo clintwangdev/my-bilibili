@@ -147,4 +147,22 @@ public class VideoApi {
         Map<String, Object> result = videoService.getVideoCoins(userId, videoId);
         return JsonResponse.success(result);
     }
+
+    @PostMapping("/video-comments")
+    @ApiOperation(value = "添加视频评论")
+    public JsonResponse<String> saveVideoComment(@RequestBody VideoComment videoComment) {
+        Long userId = userSupport.getCurrentId();
+        videoComment.setUserId(userId);
+        videoService.saveVideoComment(videoComment);
+        return JsonResponse.success();
+    }
+
+    @GetMapping("/video-comments")
+    @ApiOperation(value = "分页获取视频评论")
+    public JsonResponse<PageResult<VideoComment>> pageListVideoComments(@RequestParam Integer no,
+                                                                        @RequestParam Integer size,
+                                                                        @RequestParam Long videoId) {
+        PageResult<VideoComment> result = videoService.pageListVideoComments(no, size, videoId);
+        return JsonResponse.success(result);
+    }
 }

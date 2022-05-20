@@ -82,4 +82,6 @@ public interface UserDao {
      * 获取刷新 token
      */
     RefreshTokenDetail getRefreshToken(String refreshToken);
+
+    List<UserInfo> batchGetUserInfosByUserIds(@Param("userIdList") Set<Long> userIdList);
 }

@@ -278,4 +278,63 @@
             videoId = #{videoId}
     </select>
 
+    <!-- 添加视频评论 -->
+    <insert id="saveVideoComment" parameterType="com.clint.mybilibili.domain.VideoComment">
+        insert into
+            t_video_comment(
+                videoId,
+                userId,
+                comment,
+                replyUserId,
+                rootId,
+                createTime
+            )
+        values (
+                #{videoId},
+                #{userId},
+                #{comment},
+                #{replyUserId},
+                #{rootId},
+                #{createTime}
+               )
+    </insert>
+
+    <!-- 获取视频一级评论总数量 -->
+    <select id="pageCountVideoComments" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select
+            count(1)
+        from
+            t_video_comment
+        where
+            videoId = #{videoId}
+            and rootId is null
+    </select>
+
+    <!-- 分页获取视频评论 -->
+    <select id="pageListVideoComments" parameterType="java.util.Map" resultType="com.clint.mybilibili.domain.VideoComment">
+        select
+            *
+        from
+            t_video_comment
+        where
+            videoId = #{videoId}
+            and rootId is null
+        order by id desc
+        limit #{start}, #{limit}
+    </select>
+
+    <!-- 批量查询视频评论 -->
+    <select id="batchGetVideoCommentsByRootIds" parameterType="java.util.List" resultType="com.clint.mybilibili.domain.VideoComment">
+        select
+            *
+        from
+            t_video_comment
+        where
+            rootId in
+            <foreach collection="rootIdList" item="rootId" open="(" separator="," close=")">
+                #{rootId}
+            </foreach>
+        order by id
+    </select>
+
 </mapper>
