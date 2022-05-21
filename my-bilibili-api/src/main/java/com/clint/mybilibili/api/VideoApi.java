@@ -2,6 +2,7 @@ package com.clint.mybilibili.api;
 
 import com.clint.mybilibili.api.support.UserSupport;
 import com.clint.mybilibili.domain.*;
+import com.clint.mybilibili.service.ElasticSearchService;
 import com.clint.mybilibili.service.VideoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -25,12 +26,17 @@ public class VideoApi {
     @Autowired
     private UserSupport userSupport;
 
+    @Autowired
+    private ElasticSearchService elasticSearchService;
+
     @PostMapping("/videos")
     @ApiOperation(value = "视频投稿")
     public JsonResponse<String> saveVideos(@RequestBody Video video) {
         Long userId = userSupport.getCurrentId();
         video.setUserId(userId);
         videoService.saveVideos(video);
+        // 添加到ES中
+        elasticSearchService.saveVideo(video);
         return JsonResponse.success();
     }
 
