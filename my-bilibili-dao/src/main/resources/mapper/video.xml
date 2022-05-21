@@ -385,4 +385,34 @@
             videoId = #{videoId}
     </select>
 
+    <!-- 查询所有用户偏好 -->
+    <select id="getAllUserPreference" resultType="com.clint.mybilibili.domain.UserPreference">
+        select
+            userId,
+            videoId,
+            sum(
+                case operationType
+                    when '0' then 2
+                    when '1' then 3
+                    when '2' then 5
+                    else 0 end
+                ) as `value`
+        from
+            t_video_operation
+        group by userId, videoId
+        order by userId
+    </select>
+
+    <select id="batchGetVideosByIds" parameterType="java.util.List" resultType="com.clint.mybilibili.domain.Video">
+        select
+            *
+        from
+            t_video
+        where
+            id in
+            <foreach collection="itemIds" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+    </select>
+
 </mapper>

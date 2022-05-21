@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.mahout.cf.taste.common.TasteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -203,5 +204,15 @@ public class VideoApi {
     public JsonResponse<Long> getVideoViewCounts(@RequestParam Long videoId) {
         Long count = videoService.getVideoViewCounts(videoId);
         return JsonResponse.success(count);
+    }
+
+    /**
+     * 视频内容推荐
+     */
+    @GetMapping("/recommendations")
+    public JsonResponse<List<Video>> recommend() throws TasteException {
+        Long userId = userSupport.getCurrentId();
+        List<Video> list = videoService.recommend(userId);
+        return JsonResponse.success(list);
     }
 }
