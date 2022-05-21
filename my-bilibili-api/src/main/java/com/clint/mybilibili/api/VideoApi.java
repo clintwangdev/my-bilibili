@@ -178,4 +178,30 @@ public class VideoApi {
         Map<String, Object> result = videoService.getVideoDetails(videoId);
         return JsonResponse.success(result);
     }
+
+    /**
+     * 添加视频观看记录
+     */
+    @PostMapping("/video-views")
+    public JsonResponse<String> saveVideoView(@RequestBody VideoView videoView,
+                                              HttpServletRequest request) {
+        Long userId;
+        try {
+            userId = userSupport.getCurrentId();
+            videoView.setUserId(userId);
+            videoService.saveVideoView(videoView, request);
+        } catch (Exception e) {
+            videoService.saveVideoView(videoView, request);
+        }
+        return JsonResponse.success();
+    }
+
+    /**
+     * 查询视频播放量
+     */
+    @GetMapping("/video-view-counts")
+    public JsonResponse<Long> getVideoViewCounts(@RequestParam Long videoId) {
+        Long count = videoService.getVideoViewCounts(videoId);
+        return JsonResponse.success(count);
+    }
 }
